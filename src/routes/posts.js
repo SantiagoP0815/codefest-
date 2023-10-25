@@ -25,6 +25,12 @@ router.get('/', isLoggedIn, async (req, res) => {
     res.render('posts/list', { posts });
 });
 
+router.get('/all/:author', async (req, res) => {
+    const { author } = req.params;
+    const posts = await pool.query('SELECT * FROM posts , users WHERE posts.author = users.u_id and posts.author = ?', [author]);
+    res.render('posts/all', { posts });
+});
+
 router.get('/all', isLoggedIn, async (req, res) => {
     const posts = await pool.query('SELECT * FROM posts , users WHERE posts.author = users.u_id');
     res.render('posts/all', { posts });
@@ -51,7 +57,7 @@ router.get('/edit/:id_post', async (req, res) => {
 
 router.get('/show/:id_post', async (req, res) => {
     const { id_post } = req.params;
-    const posts = await pool.query('SELECT * FROM posts WHERE id_post = ?', [id_post]);
+    const posts = await pool.query('SELECT * FROM posts , users WHERE posts.author = users.u_id and posts.id_post = ?', [id_post]);
     if (posts.length > 0) {
         const post = posts[0];
         res.render('posts/show', { post });
