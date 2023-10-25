@@ -38,16 +38,14 @@ router.get('/', isLoggedIn, async (req, res) => {
         const friends = await pool.query('SELECT * FROM friends WHERE f_user_1 or f_user_2 = ?', [req.user.u_id]);
         const valuesArray = friends.map(row => [row.f_user_1, row.f_user_2]);
         const valuesString = valuesArray.join(',');
-        const friendNames = await pool.query('SELECT fullname FROM users WHERE u_id IN (' + valuesString + ')');
-        const friendId = await pool.query('SELECT u_id FROM users WHERE u_id IN (' + valuesString + ')');
+        const friendNames = await pool.query('SELECT fullname, u_id FROM users WHERE u_id IN (' + valuesString + ')');
         const filteredFriendNames = friendNames.filter(row => row.fullname !== user_name);
-        const valuesArray2 = filteredFriendNames.map(row => [row.fullname]);
-        const valuesArray3 = friendId.map(row => [row.u_id]);
+        const valuesArray2 = filteredFriendNames.map(row => [row.fullname], [row.u_id]);
         if (friends.length === 0) {
             const noUsers = [];
             res.render('friends/list', { friendRequest: req.user.hasFriendRequest, friendRequestsLenght: req.user.length, noUsers });
         } else {
-            res.render('friends/list', { friends, valuesArray2, friendRequest: req.user.hasFriendRequest, friendRequestsLenght: req.user.length, valuesArray3 });
+            res.render('friends/list', { friends, valuesArray2, friendRequest: req.user.hasFriendRequest, friendRequestsLenght: req.user.length });
         }
     } catch (error) {
         console.error(error);
