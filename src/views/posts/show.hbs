@@ -1,4 +1,4 @@
-<div class="mt-4 col-md-4 mx-auto">
+<div class="mt-4 col-md-4 mx-auto" style="overflow: auto; max-height: 800px;">
     <div class="card">
         <div class="card-body">
             <form >
@@ -20,5 +20,43 @@
                 </div>
             </form>
         </div>
+        <button style="width: 25%;" id="showChatForm" class="btn btn-primary m-4">Agregar Chat</button>
+        <form action="/posts/chat/{{post.id_post}}" method="POST" class="m-4" id="chatForm" style="display: none;">
+            <div class="form-group">
+                <h1 style="font-size: medium;" >Chat Message</h1>                    
+                <textarea id="chatMessage" name="c_content" rows="2" class="form-control" placeholder="Message"></textarea>
+            </div>
+            <button class="btn btn-primary">Enviar</button>
+        </form>
+        <h3 class="m-2 card-title text-uppercase" style="font-size: large;">
+            Chat:
+        </h3>
+        {{#each chat}}
+        <div class="card-body">
+            <form >
+                <a class="d-flex">
+                </a>                
+                <div class="form-group">
+                    <h1 style="font-size: medium;">{{fullname}}</h1>
+                    <textarea name="description" rows="2" class="form-control" placeholder="Description" readonly>{{c_content}}</textarea>
+                </div>
+            </form>
+        </div>
+        {{/each}}
     </div>
 </div>
+
+<script>
+    // Obtén referencias a los elementos HTML
+    const showChatButton = document.getElementById("showChatForm");
+    const chatForm = document.getElementById("chatForm");
+
+    // Agrega un controlador de eventos al botón para mostrar/ocultar el formulario
+    showChatButton.addEventListener("click", () => {
+        if (chatForm.style.display === "none" || chatForm.style.display === "") {
+            chatForm.style.display = "block"; // Muestra el formulario
+        } else {
+            chatForm.style.display = "none"; // Oculta el formulario
+        }
+    });
+</script>
