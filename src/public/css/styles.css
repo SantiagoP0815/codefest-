@@ -29,6 +29,10 @@ body {
 .btn-success {
   background-color: #B15EFF;
 }
+
+.btn-success:hover{
+  background-color: #9f3cfc;
+}
 .navbar-nav {
   display: flex;
   justify-content: center;
