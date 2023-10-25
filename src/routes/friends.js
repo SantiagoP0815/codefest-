@@ -9,7 +9,7 @@ router.get('/add', (req, res) => {
 });
 
 router.post('/add', async (req, res) => {
-    const { title, url, description } = req.body;
+    const { name } = req.body;
     const newLink = {
         title,
         url,
@@ -22,8 +22,21 @@ router.post('/add', async (req, res) => {
 });
 
 router.get('/', isLoggedIn, async (req, res) => {
-    const friends = await pool.query('SELECT * FROM friends WHERE user_id = ?', [req.user.id]);
-    res.render('friends/list', { friends });
+    const user = req.user.u_id;
+    const user_name = req.user.fullname;
+    console.log(user_name);
+    const friends = await pool.query('SELECT * FROM friends WHERE f_user_1 = ? OR f_user_2 = ?', [user, user]);
+    console.log(friends);
+    const valuesArray = friends.map(row => [row.f_user_1, row.f_user_2]);
+    console.log(valuesArray);
+    const valuesString = valuesArray.join(',');
+    const friendNames = await pool.query('SELECT fullname FROM users WHERE u_id IN (' + valuesString + ')');
+    console.log(friendNames);
+    const filteredFriendNames = friendNames.filter(row => row.fullname !== user_name);
+    console.log(filteredFriendNames);
+    const valuesArray2 = filteredFriendNames.map(row => [row.fullname]);
+    console.log(valuesArray2);
+    res.render('friends/list', { friends, valuesArray2 });
 });
 
 router.get('/delete/:id', async (req, res) => {

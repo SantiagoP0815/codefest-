@@ -1,24 +1,14 @@
 <div class="container p-4">
     <div class="row">
-        {{#each friends}}
+        {{#each valuesArray2}} 
         <div class="col-md-3">
             <div class="card text-center">
                 <div class="card-body">
-                    <a href="{{url}}" target="_blank">
-                        <h3 class="card-title text-uppercase">
-                            {{title}}
-                        </h3>
-                    </a>
-                    <p class="m-2">{{description}}</p>
-                    <p class="text-muted">
-                        {{timeago created_at}}
-                    </p>
-                    <a class="btn btn-danger" href="/friends/delete/{{id}}">
-                        Delete Link
-                    </a>
-                    <a class="btn btn-secondary" href="/friends/edit/{{id}}">
-                        Edit
-                    </a>
+                    <h3 class="card-title text-uppercase">
+                        {{#each this}} 
+                            {{this}}
+                        {{/each}}
+                    </h3>
                 </div>
             </div>
         </div>
