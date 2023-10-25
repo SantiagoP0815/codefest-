@@ -9,46 +9,45 @@ router.get('/add', (req, res) => {
 });
 
 router.post('/add', async (req, res) => {
-    const { title, url, description } = req.body;
+    const { p_title, p_content } = req.body;
     const newpost = {
         p_title,
-        url,
-        description,
-        u_id: req.user.u_id
+        p_content,
+        author: req.user.u_id
     };
     await pool.query('INSERT INTO posts set ?', [newpost]);
-    req.flash('success', 'post Saved Successfully');
+    req.flash('success', 'Post Saved Successfully');
     res.redirect('/posts');
 });
 
 router.get('/', isLoggedIn, async (req, res) => {
-    const posts = await pool.query('SELECT * FROM posts WHERE u_id = ?', [req.user.id]);
+    const posts = await pool.query('SELECT * FROM posts WHERE author = ?', [req.user.u_id]);
     res.render('posts/list', { posts });
 });
 
-router.get('/delete/:id', async (req, res) => {
-    const { id } = req.params;
-    await pool.query('DELETE FROM posts WHERE ID = ?', [id]);
+router.get('/delete/:id_post', async (req, res) => {
+    const { id_post } = req.params;
+    await pool.query('DELETE FROM posts WHERE id_post = ?', [id_post]);
     req.flash('success', 'Post Removed Successfully');
     res.redirect('/posts');
 });
 
-router.get('/edit/:id', async (req, res) => {
-    const { id } = req.params;
-    const posts = await pool.query('SELECT * FROM posts WHERE id = ?', [id]);
+
+router.get('/edit/:id_post', async (req, res) => {
+    const { id_post } = req.params;
+    const posts = await pool.query('SELECT * FROM posts WHERE author = ?', [id_post]);
     console.log(posts);
     res.render('posts/edit', {post: posts[0]});
 });
 
-router.post('/edit/:id', async (req, res) => {
-    const { id } = req.params;
-    const { title, description, url} = req.body; 
+router.post('/edit/:id_post', async (req, res) => {
+    const { id_post } = req.params;
+    const { p_title, p_content} = req.body; 
     const newpost = {
-        title,
-        description,
-        url
+        p_title,
+        p_content
     };
-    await pool.query('UPDATE posts set ? WHERE id = ?', [newpost, id]);
+    await pool.query('UPDATE posts set ? WHERE author = ?', [newpost, id_post]);
     req.flash('success', 'Post Updated Successfully');
     res.redirect('/posts');
 });
