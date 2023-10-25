@@ -9,7 +9,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ml-auto">
         {{#if user}}
-        <h1 class="mr-4" style="color: rgb(2555, 255, 255);">{{user.fullname}}</h1>
+       
         <li class="nav-item">
           <a class="nav-link" href="/posts"> My Proyects</a>
         </li>
@@ -25,6 +25,7 @@
         <li class="nav-item">
           <a class="nav-link" href="/logout">Logout</a>
         </li>
+         <h1 class="mr-4" style="color: rgb(2555, 255, 255);"> <ion-icon name="person-outline" class="ion-icon"></ion-icon> {{user.fullname}}</h1>
         {{else}}
         <li class="nav-item">
           <a class="nav-link" href="/signin">SignIn</a>
