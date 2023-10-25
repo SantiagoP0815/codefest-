@@ -35,28 +35,37 @@ router.get('/delete/:id_post', async (req, res) => {
 
 router.get('/edit/:id_post', async (req, res) => {
     const { id_post } = req.params;
-    const posts = await pool.query('SELECT * FROM posts WHERE author = ?', [id_post]);
-    console.log(posts);
-    res.render('posts/edit', {post: posts[0]});
+    const posts = await pool.query('SELECT * FROM posts WHERE id_post = ?', [id_post]);
+    if (posts.length > 0) {
+        const post = posts[0];
+        res.render('posts/edit', { post });
+    } else {
+        res.status(404).send('Post not found');
+    }
 });
 
 router.get('/show/:id_post', async (req, res) => {
     const { id_post } = req.params;
-    const posts = await pool.query('SELECT * FROM posts WHERE author = ?', [id_post]);
-    console.log(posts);
-    res.render('posts/show', {post: posts[0]});
+    const posts = await pool.query('SELECT * FROM posts WHERE id_post = ?', [id_post]);
+    if (posts.length > 0) {
+        const post = posts[0];
+        res.render('posts/show', { post });
+    } else {
+        res.status(404).send('Post not found');
+    }
 });
 
 router.post('/edit/:id_post', async (req, res) => {
-    const { id_post } = req.params;
-    const { p_title, p_content} = req.body; 
-    const newpost = {
+    const { id_post } = req.params; // Obtén el ID del post desde los parámetros de la URL
+    const { p_title, p_content } = req.body; 
+    const newPost = {
         p_title,
         p_content
     };
-    await pool.query('UPDATE posts set ? WHERE author = ?', [newpost, id_post]);
+    await pool.query('UPDATE posts SET ? WHERE id_post = ?', [newPost, id_post]);
     req.flash('success', 'Post Updated Successfully');
     res.redirect('/posts');
 });
+
 
 module.exports = router;

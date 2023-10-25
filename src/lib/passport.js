@@ -28,19 +28,31 @@ passport.use('local.signup', new LocalStrategy({
   passwordField: 'password',
   passReqToCallback: true
 }, async (req, email, password, done) => {
-
   const { fullname } = req.body;
-  let newUser = {
-    fullname,
-    email,
-    password
-  };
-  newUser.password = await helpers.encryptPassword(password);
-  // Saving in the Database
-  const result = await pool.query('INSERT INTO users SET ? ', newUser);
-  newUser.id = result.insertId;
-  return done(null, newUser);
+  
+  // Verifica si ya existe un usuario con el mismo correo electrónico
+  const existingUser = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
+
+  if (existingUser.length > 0) {
+    // Ya existe un usuario con el mismo correo electrónico
+    return done(null, false, req.flash('message', 'Email is already in use'));
+  } else {
+    // El correo electrónico no está en uso, puedes proceder a crear el nuevo usuario
+    const newUser = {
+      fullname,
+      email,
+      password
+    };
+    newUser.password = await helpers.encryptPassword(password);
+    
+    // Guarda el nuevo usuario en la base de datos
+    const result = await pool.query('INSERT INTO users SET ?', newUser);
+    newUser.u_id = result.insertId;
+    
+    return done(null, newUser);
+  }
 }));
+
 
 passport.serializeUser((user, done) => {
   done(null, user.u_id);

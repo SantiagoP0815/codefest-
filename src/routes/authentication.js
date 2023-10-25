@@ -29,7 +29,7 @@ router.post('/signin', (req, res, next) => {
     res.redirect('/signin');
   }
   passport.authenticate('local.signin', {
-    successRedirect: '/profile',
+    successRedirect: '/posts',
     failureRedirect: '/signin',
     failureFlash: true
   })(req, res, next);

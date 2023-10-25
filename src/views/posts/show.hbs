@@ -3,16 +3,11 @@
         <div class="card-body">
             <form >
                 <div class="form-group">
-                    <input type="text" name="title" class="form-control" placeholder="Title" value="{{posts.p_title}}" autofocus readonly>
+                    <input type="text" name="title" class="form-control" placeholder="Title" value="{{post.p_title}}" autofocus readonly>
                 </div>
 
                 <div class="form-group">
-                    <textarea name="description" rows="2" class="form-control" placeholder="Description" readonly>{{posts.p_content}}</textarea>
-                </div>
-                <div class="form-group">
-                    <button class="btn btn-success btn-block">
-                        Save
-                    </button>
+                    <textarea name="description" rows="2" class="form-control" placeholder="Description" readonly>{{post.p_content}}</textarea>
                 </div>
             </form>
         </div>

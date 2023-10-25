@@ -1,15 +1,12 @@
 <div class="col-md-4 mx-auto">
     <div class="card">
         <div class="card-body">
-            <form action="/posts/edit/{{posts.id}}" method="POST">
+            <form action="/posts/edit/{{post.id_post}}" method="POST">
                 <div class="form-group">
-                    <input type="text" name="title" class="form-control" placeholder="Title" value="{{posts.title}}" autofocus>
+                    <input type="text" name="p_title" class="form-control" placeholder="Title" value="{{post.p_title}}" autofocus>
                 </div>
                 <div class="form-group">
-                    <input type="url" name="url" class="form-control" placeholder="URL" value="{{posts.url}}">
-                </div>
-                <div class="form-group">
-                    <textarea name="description" rows="2" class="form-control" placeholder="Description">{{posts.description}}</textarea>
+                    <textarea name="p_content" rows="2" class="form-control" placeholder="Content">{{post.p_content}}</textarea>
                 </div>
                 <div class="form-group">
                     <button class="btn btn-success btn-block">
