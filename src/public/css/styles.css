@@ -23,7 +23,10 @@ body {
 }
 .title-index-2{
   color: #FCF5ED;
-
+}
+.card{
+  border-color: #B15EFF;
+  border-width: 0.3rem;
 }
 .masthead {
     color: white;
