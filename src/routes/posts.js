@@ -28,9 +28,7 @@ router.get('/', isLoggedIn, async (req, res) => {
             req.user.length = friendRequests.length;
             req.user.hasFriendRequest = true;
         }
-
         const posts = await pool.query('SELECT * FROM posts WHERE author = ?', [req.user.u_id]);
-
         res.render('posts/list', { posts, friendRequest: req.user.hasFriendRequest, friendRequestsLenght: req.user.length});
     } catch (error) {
         console.error(error);
