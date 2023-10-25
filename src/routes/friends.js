@@ -40,7 +40,8 @@ router.get('/', isLoggedIn, async (req, res) => {
         const valuesString = valuesArray.join(',');
         const friendNames = await pool.query('SELECT fullname, u_id FROM users WHERE u_id IN (' + valuesString + ')');
         const filteredFriendNames = friendNames.filter(row => row.fullname !== user_name);
-        const valuesArray2 = filteredFriendNames.map(row => [row.fullname], [row.u_id]);
+        const valuesArray2 = filteredFriendNames.map(row => ({ fullname: row.fullname, u_id: row.u_id }));
+        console.log(valuesArray2);
         if (friends.length === 0) {
             const noUsers = [];
             res.render('friends/list', { friendRequest: req.user.hasFriendRequest, friendRequestsLenght: req.user.length, noUsers });
