@@ -38,6 +38,11 @@ router.get('/', isLoggedIn, async (req, res) => {
     }
 });
 
+router.get('/all', isLoggedIn, async (req, res) => {
+    const posts = await pool.query('SELECT * FROM posts , users WHERE posts.author = users.u_id');
+    res.render('posts/all', { posts });
+});
+
 router.get('/delete/:id_post', async (req, res) => {
     const { id_post } = req.params;
     await pool.query('DELETE FROM posts WHERE id_post = ?', [id_post]);
