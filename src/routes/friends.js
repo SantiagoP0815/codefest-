@@ -10,21 +10,30 @@ router.get('/add', (req, res) => {
 });
 
 router.post('/add', async (req, res) => {
-    const email = req.body.email; 
-    const userQuery = await pool.query('SELECT u_id FROM users WHERE email = ?', [email]);
-    console.log(userQuery);
-    if (userQuery.length === 1) {
-        const f_receiver = userQuery[0].u_id; 
+    const email = req.body.email;
 
-        const f_sender = req.user.u_id; 
-        const insertQuery = 'INSERT INTO friend_request (f_sender, f_receiver) VALUES (?, ?)';
-        await pool.query(insertQuery, [f_sender, f_receiver]);
+    try {
+        // Verificar si el correo existe en la base de datos
+        const userQuery = await pool.query('SELECT u_id FROM users WHERE email = ?', [email]);
 
-        res.redirect('/friends'); 
-    } else {
-        res.redirect('/friends/add');
+        if (userQuery.length > 0) { // Verificar si se encontraron resultados
+            const f_receiver = userQuery[0].u_id;
+            const f_sender = req.user.u_id;
+
+            // Insertar la solicitud de amistad en la base de datos
+            const insertQuery = 'INSERT INTO friend_request (f_sender, f_receiver) VALUES (?, ?)';
+            await pool.query(insertQuery, [f_sender, f_receiver]);
+
+            res.redirect('/friends');
+        } else {
+            res.redirect('/friends/add');
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error en la consulta de la base de datos');
     }
 });
+
 
 router.get('/', isLoggedIn, async (req, res) => {
     const userId = req.user.u_id; 
