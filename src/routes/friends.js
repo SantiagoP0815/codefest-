@@ -3,39 +3,38 @@ const router = express.Router();
 
 const pool = require('../database');
 const { isLoggedIn } = require('../lib/auth');
+const { use } = require('passport');
 
 router.get('/add', (req, res) => {
     res.render('friends/add');
 });
 
 router.post('/add', async (req, res) => {
-    const { name } = req.body;
-    const newLink = {
-        title,
-        url,
-        description,
-        user_id: req.user.id
-    };
-    await pool.query('INSERT INTO friends set ?', [newLink]);
-    req.flash('success', 'Link Saved Successfully');
-    res.redirect('/friends');
+    const email = req.body.email; 
+    console.log(email);
+    const userQuery = await pool.query('SELECT u_id FROM users WHERE email = ?', [email]);
+
+    if (userQuery.length === 1) {
+        const f_receiver = userQuery[0].u_id; 
+
+        const f_sender = req.user.u_id; 
+        const insertQuery = 'INSERT INTO friends (f_sender, f_receiver) VALUES (?, ?)';
+        await pool.query(insertQuery, [f_sender, f_receiver]);
+
+        res.redirect('/friends'); 
+    } else {
+        res.redirect('/friends/add');
+    }
 });
 
 router.get('/', isLoggedIn, async (req, res) => {
-    const user = req.user.u_id;
-    const user_name = req.user.fullname;
-    console.log(user_name);
-    const friends = await pool.query('SELECT * FROM friends WHERE f_user_1 = ? OR f_user_2 = ?', [user, user]);
-    console.log(friends);
+    user_name = req.user.fullname;
+    const friends = await pool.query('SELECT * FROM friends WHERE f_user_1 or f_user_2 = ?', [req.user.u_id]);
     const valuesArray = friends.map(row => [row.f_user_1, row.f_user_2]);
-    console.log(valuesArray);
     const valuesString = valuesArray.join(',');
     const friendNames = await pool.query('SELECT fullname FROM users WHERE u_id IN (' + valuesString + ')');
-    console.log(friendNames);
     const filteredFriendNames = friendNames.filter(row => row.fullname !== user_name);
-    console.log(filteredFriendNames);
     const valuesArray2 = filteredFriendNames.map(row => [row.fullname]);
-    console.log(valuesArray2);
     res.render('friends/list', { friends, valuesArray2 });
 });
 
