@@ -20,6 +20,24 @@ router.post('/add', async (req, res) => {
     res.redirect('/posts');
 });
 
+router.post('/chat/:id_post', async (req, res) => {
+    const { id_post } = req.params;
+    const { c_content } = req.body;
+    const newchat = {
+        c_content,
+        post_id: id_post,
+        c_user: req.user.u_id,
+    };
+    try {
+        await pool.query('INSERT INTO comments SET ?', [newchat]);
+        res.redirect(`/posts/show/${id_post}`);
+    } catch (err) {
+        console.error(err);
+        req.flash('error', 'An error occurred while saving the chat');
+        res.redirect(`/posts/show/${id_post}`);
+    }
+});
+
 router.get('/', isLoggedIn, async (req, res) => {
     const userId = req.user.u_id; 
     try {
@@ -81,9 +99,10 @@ router.get('/edit/:id_post', async (req, res) => {
 router.get('/show/:id_post', async (req, res) => {
     const { id_post } = req.params;
     const posts = await pool.query('SELECT * FROM posts , users WHERE posts.author = users.u_id and posts.id_post = ?', [id_post]);
+    const chat = await pool.query('SELECT * FROM comments, users WHERE comments.c_user = users.u_id and comments.post_id = ?', [id_post]);
     if (posts.length > 0) {
         const post = posts[0];
-        res.render('posts/show', { post });
+        res.render('posts/show', { post,chat });
     } else {
         res.status(404).send('Post not found');
     }
