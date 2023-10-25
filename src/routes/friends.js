@@ -11,14 +11,13 @@ router.get('/add', (req, res) => {
 
 router.post('/add', async (req, res) => {
     const email = req.body.email; 
-    console.log(email);
     const userQuery = await pool.query('SELECT u_id FROM users WHERE email = ?', [email]);
-
+    console.log(userQuery);
     if (userQuery.length === 1) {
         const f_receiver = userQuery[0].u_id; 
 
         const f_sender = req.user.u_id; 
-        const insertQuery = 'INSERT INTO friends (f_sender, f_receiver) VALUES (?, ?)';
+        const insertQuery = 'INSERT INTO friend_request (f_sender, f_receiver) VALUES (?, ?)';
         await pool.query(insertQuery, [f_sender, f_receiver]);
 
         res.redirect('/friends'); 
