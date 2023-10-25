@@ -29,6 +29,12 @@ body {
 .btn-success {
   background-color: #B15EFF;
 }
+.btn-danger {
+  background-color: #FF6969;
+}
+.btn-secondary{
+  background-color: #B97A95;
+}
 
 .btn-success:hover{
   background-color: #9f3cfc;
