@@ -44,24 +44,11 @@ router.get('/delete/:id', async (req, res) => {
     res.redirect('/friends');
 });
 
-router.get('/edit/:id', async (req, res) => {
+router.get('/request', async (req, res) => {
     const { id } = req.params;
     const friends = await pool.query('SELECT * FROM friends WHERE id = ?', [id]);
     console.log(friends);
     res.render('friends/edit', {link: friends[0]});
-});
-
-router.post('/edit/:id', async (req, res) => {
-    const { id } = req.params;
-    const { title, description, url} = req.body; 
-    const newLink = {
-        title,
-        description,
-        url
-    };
-    await pool.query('UPDATE friends set ? WHERE id = ?', [newLink, id]);
-    req.flash('success', 'Link Updated Successfully');
-    res.redirect('/friends');
 });
 
 module.exports = router;
