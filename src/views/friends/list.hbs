@@ -1,18 +1,16 @@
 <div class="container p-4">
-            <div class="col-md-4 mx-auto">
-            <div class="card card-body text-center">
-                <a href="/friends/add">  Add a friend! </a>
-            </div>
+    <div class="col-md-4 mx-auto" >
+        <div class="card card-body text-center mb-4">
+            <a href="/friends/add">Add One!</a>
         </div>
+    </div>
     <div class="row">
         {{#each valuesArray2}} 
         <div class="col-md-3">
             <div class="card text-center">
-                <div class="card-body">
-                    <a class="d-flex text-uppercase" href="/posts/all/{{u_id}}">
-                        {{#each this}} 
-                            {{this}}
-                        {{/each}}
+                <div class="card-body" >
+                    <a class="d-flex text-uppercase" style="justify-content: center;" href="/posts/all/{{u_id}}">
+                        {{fullname}} 
                     </a>
                 </div>
             </div>

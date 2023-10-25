@@ -80,7 +80,7 @@ router.get('/request', async (req, res) => {
         res.render('friends/req', { valuesArray2, friendRequest: req.user.hasFriendRequest, friendRequestsLenght: req.user.length});
     } catch (error) {
         console.error(error);
-        res.status(500).send('Error en la consulta de solicitudes de amistad o posts.');
+        res.render('friends/req');
     }
 });
 
