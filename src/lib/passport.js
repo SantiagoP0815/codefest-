@@ -38,7 +38,7 @@ passport.use('local.signup', new LocalStrategy({
   newUser.password = await helpers.encryptPassword(password);
   // Saving in the Database
   const result = await pool.query('INSERT INTO users SET ? ', newUser);
-  newUser.id = result.insertId;
+  newUser.u_id = result.insertId;
   return done(null, newUser);
 }));
 
