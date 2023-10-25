@@ -11,7 +11,7 @@ body {
 }
 
 .navbar {
-    background: black !important;
+  background: radial-gradient(circle, #B15EFF, #ae27aa);
 }
 
 .nav-link {
