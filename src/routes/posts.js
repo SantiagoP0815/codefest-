@@ -4,7 +4,7 @@ const router = express.Router();
 const pool = require('../database');
 const { isLoggedIn } = require('../lib/auth');
 
-router.get('/add', (req, res) => {
+router.get('/add', async (req, res) => {
     res.render('posts/add');
 });
 
@@ -21,8 +21,21 @@ router.post('/add', async (req, res) => {
 });
 
 router.get('/', isLoggedIn, async (req, res) => {
-    const posts = await pool.query('SELECT * FROM posts WHERE author = ?', [req.user.u_id]);
-    res.render('posts/list', { posts });
+    const userId = req.user.u_id; 
+    try {
+        const friendRequests = await pool.query('SELECT * FROM friend_request WHERE f_receiver = ?', [userId]);
+        if (friendRequests.length > 0) {
+            req.user.length = friendRequests.length;
+            req.user.hasFriendRequest = true;
+        }
+
+        const posts = await pool.query('SELECT * FROM posts WHERE author = ?', [req.user.u_id]);
+
+        res.render('posts/list', { posts, friendRequest: req.user.hasFriendRequest, friendRequestsLenght: req.user.length});
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error en la consulta de solicitudes de amistad o posts.');
+    }
 });
 
 router.get('/delete/:id_post', async (req, res) => {
