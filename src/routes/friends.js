@@ -49,23 +49,30 @@ router.get('/', isLoggedIn, async (req, res) => {
     }
 });
 
-router.get('/delete/:id', async (req, res) => {
+router.get('/delete/:u_id', async (req, res) => {
     const { id } = req.params;
-    await pool.query('DELETE FROM friends WHERE ID = ?', [id]);
+    await pool.query('DELETE FROM friends_request WHERE ID = ?', [id]);
     req.flash('success', 'Link Removed Successfully');
-    res.redirect('/friends');
+    res.redirect('/friends/request');
 });
 
 router.get('/request', async (req, res) => {
     const userId = req.user.u_id; 
+    const user_name = req.user.fullname;
     try {
         const friendRequests = await pool.query('SELECT * FROM friend_request WHERE f_receiver = ?', [userId]);
+        console.log(friendRequests);
         if (friendRequests.length > 0) {
             req.user.length = friendRequests.length;
             req.user.hasFriendRequest = true;
-
         }
-        res.render('friends/req', { fRequ: friendRequests, friendRequest: req.user.hasFriendRequest, friendRequestsLenght: req.user.length});
+        const valuesArray = friendRequests.map(row => [row.f_sender, row.f_receiver]);
+        const valuesString = valuesArray.join(',');
+        const friendNames = await pool.query('SELECT fullname FROM users WHERE u_id IN (' + valuesString + ')');
+        const filteredFriendNames = friendNames.filter(row => row.fullname !== user_name);
+        const valuesArray2 = filteredFriendNames.map(row => [row.fullname]);
+        console.log(valuesArray2);
+        res.render('friends/req', { valuesArray2, friendRequest: req.user.hasFriendRequest, friendRequestsLenght: req.user.length});
     } catch (error) {
         console.error(error);
         res.status(500).send('Error en la consulta de solicitudes de amistad o posts.');

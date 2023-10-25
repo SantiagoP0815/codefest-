@@ -1,25 +1,21 @@
-    <div class="row">
-        {{#each fReq}}
+<div class="row">
+        {{#each valuesArray2}} 
         <div class="col-md-3">
             <div class="card text-center">
                 <div class="card-body">
-                    <a href="/posts/show/{{id_post}}" target="_blank">
-                        <h3 class="card-title text-uppercase">
-                            {{p_title}}
-                        </h3>
+                    <h3 class="card-title text-uppercase">
+                        {{#each this}} 
+                            {{this}}
+                        {{/each}}
+                    </h3>
+                    <a class="btn btn-danger" href="/friends/delete/{{u_id}}">
+                    Reject
                     </a>
-                    <p class="text-muted">
-                        {{timeago created_at}}
-                    </p>
-                    <a class="btn btn-danger" href="/friends/delete/{{id_friends}}">
+                    <a class="btn btn-success" href="/friends/accept/{{u_id}}">
                         Accept
-                    </a>
-                    <a class="btn btn-secondary" href="/friends/accept{{id_friends}}">
-                        Discard
                     </a>
                 </div>
             </div>
         </div>
         {{/each}}
     </div>
-</div>
