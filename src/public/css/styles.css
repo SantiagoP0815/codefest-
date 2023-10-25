@@ -18,7 +18,7 @@ body {
 }
 
 .mr-4{
-  transform: translateX(2.5rem);
+  transform: translateX(-2.5rem);
 }
 .mr-4 ion-icon{
   margin-left: 2rem;
@@ -26,7 +26,13 @@ body {
   align-items: center;
   transform: translateY(0.31rem);
 }
+.btn-success {
+  background-color: #B15EFF;
+}
 
+.btn-success:hover{
+  background-color: #9f3cfc;
+}
 .navbar-nav {
   display: flex;
   justify-content: center;

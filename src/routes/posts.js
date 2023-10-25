@@ -50,10 +50,8 @@ router.get('/all', isLoggedIn, async (req, res) => {
             req.user.length = friendRequests.length;
             req.user.hasFriendRequest = true;
         }
-
         const posts = await pool.query('SELECT * FROM posts , users WHERE posts.author = users.u_id');
-
-        res.render('posts/list', { posts, friendRequest: req.user.hasFriendRequest, friendRequestsLenght: req.user.length});
+        res.render('posts/all', { posts, friendRequest: req.user.hasFriendRequest, friendRequestsLenght: req.user.length});
     } catch (error) {
         console.error(error);
         res.status(500).send('Error en la consulta de solicitudes de amistad o posts.');
