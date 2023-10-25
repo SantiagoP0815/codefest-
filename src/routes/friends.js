@@ -27,14 +27,26 @@ router.post('/add', async (req, res) => {
 });
 
 router.get('/', isLoggedIn, async (req, res) => {
-    user_name = req.user.fullname;
-    const friends = await pool.query('SELECT * FROM friends WHERE f_user_1 or f_user_2 = ?', [req.user.u_id]);
-    const valuesArray = friends.map(row => [row.f_user_1, row.f_user_2]);
-    const valuesString = valuesArray.join(',');
-    const friendNames = await pool.query('SELECT fullname FROM users WHERE u_id IN (' + valuesString + ')');
-    const filteredFriendNames = friendNames.filter(row => row.fullname !== user_name);
-    const valuesArray2 = filteredFriendNames.map(row => [row.fullname]);
-    res.render('friends/list', { friends, valuesArray2 });
+    const userId = req.user.u_id; 
+    try {
+        const friendRequests = await pool.query('SELECT * FROM friend_request WHERE f_receiver = ?', [userId]);
+        if (friendRequests.length > 0) {
+            req.user.length = friendRequests.length;
+            req.user.hasFriendRequest = true;
+        }
+        user_name = req.user.fullname;
+        const friends = await pool.query('SELECT * FROM friends WHERE f_user_1 or f_user_2 = ?', [req.user.u_id]);
+        const valuesArray = friends.map(row => [row.f_user_1, row.f_user_2]);
+        const valuesString = valuesArray.join(',');
+        const friendNames = await pool.query('SELECT fullname FROM users WHERE u_id IN (' + valuesString + ')');
+        const filteredFriendNames = friendNames.filter(row => row.fullname !== user_name);
+        const valuesArray2 = filteredFriendNames.map(row => [row.fullname]);
+        res.render('friends/list', { friends, valuesArray2, friendRequest: req.user.hasFriendRequest, friendRequestsLenght: req.user.length });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error en la consulta de solicitudes de amistad o posts.');
+    }
 });
 
 router.get('/delete/:id', async (req, res) => {
@@ -45,10 +57,19 @@ router.get('/delete/:id', async (req, res) => {
 });
 
 router.get('/request', async (req, res) => {
-    const { id } = req.params;
-    const friends = await pool.query('SELECT * FROM friends WHERE id = ?', [id]);
-    console.log(friends);
-    res.render('friends/edit', {link: friends[0]});
+    const userId = req.user.u_id; 
+    try {
+        const friendRequests = await pool.query('SELECT * FROM friend_request WHERE f_receiver = ?', [userId]);
+        if (friendRequests.length > 0) {
+            req.user.length = friendRequests.length;
+            req.user.hasFriendRequest = true;
+
+        }
+        res.render('friends/req', { fRequ: friendRequests, friendRequest: req.user.hasFriendRequest, friendRequestsLenght: req.user.length});
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error en la consulta de solicitudes de amistad o posts.');
+    }
 });
 
 module.exports = router;
