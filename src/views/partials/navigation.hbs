@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
-    <a class="navbar-brand" href="/">Home
+    <a class="navbar-brand" href="/" > <ion-icon name="home-outline" class="ion-icon"> </ion-icon>
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
       aria-expanded="false" aria-label="Toggle navigation">
@@ -9,12 +9,12 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ml-auto">
         {{#if user}}
-        <h1 class="mr-4" style="color: rgb(2555, 255, 255);">{{user.fullname}}</h1>
+
         <li class="nav-item">
-          <a class="nav-link" href="/posts"> My Proyects</a>
+          <a class="nav-link" href="/posts">Proyects</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/posts/all"> Public</a>
+          <a class="nav-link" href="/posts/all">Public</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/friends/request">Friends Request{{#if user.hasFriendRequest}} ({{user.length}}){{/if}}</a>
@@ -25,7 +25,7 @@
         <li class="nav-item">
           <a class="nav-link" href="/logout">Logout</a>
         </li>
-        {{else}}
+        {{else}}  
         <li class="nav-item">
           <a class="nav-link" href="/signin">SignIn</a>
         </li>
@@ -36,4 +36,8 @@
       </ul>
     </div>
   </div>
+  <h1 class="mr-4" style="color: rgb(2555, 255, 255);">{{user.fullname}}</h1>
 </nav>
+
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
