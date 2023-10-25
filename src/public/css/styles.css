@@ -10,6 +10,16 @@ body {
     height: 100vh;
 }
 
+.navbar-brand ion-icon {
+  font-size: 2.5rem;
+}
+
+.navbar-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .navbar {
   background: radial-gradient(circle, #B15EFF, #ae27aa);
   height: 5rem;
