@@ -1,44 +1,38 @@
-CREATE DATABASE db_links;
+-- Crear la base de datos CodeFest
+CREATE DATABASE CodeFest;
 
-USE db_links;
+-- Usar la base de datos CodeFest
+USE CodeFest;
 
--- TABLE USER
--- all pasword wil be encrypted using SHA1
+-- Crear la tabla de usuarios
 CREATE TABLE users (
-  id INT(11) NOT NULL,
+  id INT(11) AUTO_INCREMENT NOT NULL,
   username VARCHAR(16) NOT NULL,
-  password VARCHAR(60) NOT NULL,
-  fullname VARCHAR(100) NOT NULL
+  password VARCHAR(40) NOT NULL, -- Suponiendo que las contraseñas se encriptarán con SHA1, lo que produce un hash de 40 caracteres
+  fullname VARCHAR(100) NOT NULL,
+  PRIMARY KEY (id) 
 );
 
-ALTER TABLE users
-  ADD PRIMARY KEY (id);
-
-ALTER TABLE users
-  MODIFY id INT(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT = 2;
-
-DESCRIBE users;
-
-INSERT INTO users (id, username, password, fullname) 
-  VALUES (1, 'john', 'password1', 'John Carter');
-
-SELECT * FROM users;
-
--- LINKS TABLE
+-- Crear la tabla de enlaces (links)
 CREATE TABLE links (
-  id INT(11) NOT NULL,
+  id INT(11) AUTO_INCREMENT NOT NULL,
   title VARCHAR(150) NOT NULL,
   url VARCHAR(255) NOT NULL,
   description TEXT,
   user_id INT(11),
-  created_at timestamp NOT NULL DEFAULT current_timestamp,
-  CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES users(id)
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_user_links FOREIGN KEY (user_id) REFERENCES users(id),
+  PRIMARY KEY (id) 
 );
 
-ALTER TABLE links
-  ADD PRIMARY KEY (id);
-
-ALTER TABLE links
-  MODIFY id INT(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT = 2;
-
-DESCRIBE links;
+-- Crear la tabla de amigos (friends)
+CREATE TABLE friends (
+  id INT(11) AUTO_INCREMENT NOT NULL,
+  title VARCHAR(150) NOT NULL,
+  url VARCHAR(255) NOT NULL,
+  description TEXT,
+  user_id INT(11),
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_user_friends FOREIGN KEY (user_id) REFERENCES users(id),
+  PRIMARY KEY (id) 
+);
