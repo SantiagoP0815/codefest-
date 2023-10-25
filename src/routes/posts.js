@@ -40,6 +40,13 @@ router.get('/edit/:id_post', async (req, res) => {
     res.render('posts/edit', {post: posts[0]});
 });
 
+router.get('/show/:id_post', async (req, res) => {
+    const { id_post } = req.params;
+    const posts = await pool.query('SELECT * FROM posts WHERE author = ?', [id_post]);
+    console.log(posts);
+    res.render('posts/show', {post: posts[0]});
+});
+
 router.post('/edit/:id_post', async (req, res) => {
     const { id_post } = req.params;
     const { p_title, p_content} = req.body; 
