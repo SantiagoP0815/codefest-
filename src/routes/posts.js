@@ -56,7 +56,7 @@ router.get('/show/:id_post', async (req, res) => {
 });
 
 router.post('/edit/:id_post', async (req, res) => {
-    const { id_post } = req.params; // Obtén el ID del post desde los parámetros de la URL
+    const { id_post } = req.params;
     const { p_title, p_content } = req.body; 
     const newPost = {
         p_title,

@@ -1,7 +1,7 @@
 body {
     background: #f5f6fa;
-font-family: 'Oswald', sans-serif;
-
+    font-family: 'Oswald', sans-serif;
+    background: url('/img/backgroundLogin.jpg');
     overflow: hidden;
 }
 
